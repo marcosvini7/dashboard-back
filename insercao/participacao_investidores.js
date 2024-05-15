@@ -8,7 +8,11 @@ const buscarPI = require('../buscas/participacao_investidores')
 */
 
 async function inserirPI(p){// Extrai os dados da página com o método "buscarPI" e depois insere no banco
-    let data = p.indice ? moment().subtract(p.indice, 'days').format('DD-MM-YYYY') : moment().format('DD-MM-YYYY')
+    if(!p.indice){
+        data = moment().add(1, 'days').format('DD-MM-YYYY')
+    } else {
+        data = moment().subtract(p.indice - 1, 'days').format('DD-MM-YYYY')
+    }
     console.log(`\n ----- Iniciando busca por participação dos investidores do dia ${data} -----`)
     let dados = await buscarPI(data) 
     const connection = conexao()                       

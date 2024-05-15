@@ -90,4 +90,20 @@ router.get('/participacao-investidores', async (req, res) => {
     });
 });
 
+router.get('/participacao-investidores/acumulados_por_mes', async (req, res) => {
+    const connection = conexao();  
+    let query = `SELECT * FROM participacao_investidores WHERE data IN (SELECT MAX(data) 
+        FROM participacao_investidores GROUP BY MONTH(data))`
+
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Erro interno no servidor');
+        } else {
+            res.send(JSON.stringify(results));
+        }
+        connection.end();
+    });
+})
+
 module.exports = router

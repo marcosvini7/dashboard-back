@@ -14,11 +14,11 @@ module.exports = async (data) => {
                 while(document.getElementsByClassName('tdHeader').length == 0
                     || document.querySelector('.table') == null
                 ){
-                    if(tentativas >= 120) break
+                    if(tentativas >= 180) break
                     await new Promise(r => setTimeout(r, 1000))
                     tentativas++
                 }            
-                if(tentativas == 120) return ''
+                if(tentativas == 180) return ''
                 // Tempo de espera para que os elementos necessários da página sejam carregados
 
                 let tableData = []

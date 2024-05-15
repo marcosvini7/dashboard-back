@@ -9,8 +9,8 @@ const app = express()
 const port = process.env.APP_PORT || 3000
 const qtdContratos = process.env.QTD_CONTRATOS || 0
 const qtdPI = process.env.QTD_PI || 0
-const buscaDiariaContratos = process.env.BUSCA_DIARIA_CONTRATOS || false
-const buscaDiariaPI = process.env.BUSCA_DIARIA_PI || false
+const hrBuscaDiariaContratos = process.env.HORARIO_BUSCA_DIARIA_CONTRATOS || false
+const hrBuscaDiariaPI = process.env.HORARIO_BUSCA_DIARIA_PI || false
 
 app.use(cors)
 app.use(router)
@@ -30,27 +30,38 @@ async function inserirDados() {
     }
 }
 
-if(buscaDiariaContratos || buscaDiariaPI){
-    // Define a regra de agendamento para todos os dias às 23:00 no fuso horário do Brasil
+if(hrBuscaDiariaContratos){
+    // Define a regra de agendamento para todos os dias no fuso horário do Brasil
     const rule = new schedule.RecurrenceRule()
-    rule.hour = 23
-    rule.minute = 0
+    rule.hour = hrBuscaDiariaContratos.split(':')[0] // horas
+    rule.minute = hrBuscaDiariaContratos.split(':')[1] // minutos
     rule.tz = 'America/Sao_Paulo' // Definindo o fuso horário do Brasil
 
     // Cria a tarefa agendada
     schedule.scheduleJob(rule, async function(){
-        if(buscaDiariaContratos) await inserirContratos({retry: 3, diaria: true}) 
-        if(buscaDiariaPI) await inserirPI({retry: 3}) 
+        await inserirContratos({retry: 3, diaria: true}) 
         // Caso os dados não sejam obtidos, 3 novas tentativas serão feitas
     })
 }
 
-inserirDados()
+if(hrBuscaDiariaPI){
+    // Define a regra de agendamento para todos os dias no fuso horário do Brasil
+    const rule = new schedule.RecurrenceRule()
+    rule.hour = hrBuscaDiariaPI.split(':')[0] // horas
+    rule.minute = hrBuscaDiariaPI.split(':')[1] // minutos
+    rule.tz = 'America/Sao_Paulo' // Definindo o fuso horário do Brasil
+
+    // Cria a tarefa agendada
+    schedule.scheduleJob(rule, async function(){
+        await inserirPI({retry: 3}) 
+        // Caso os dados não sejam obtidos, 3 novas tentativas serão feitas
+    }) 
+}
 
 app.listen(port, () => {
     console.log(`Servidor escutando na porta ${port}`)
 })
 
-
+inserirDados()
 
 

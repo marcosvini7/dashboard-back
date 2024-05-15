@@ -10,8 +10,13 @@ const buscarContratos = require('../buscas/contratos')
 
 async function inserirContratos(p){ // Extrai os dados da página com o método "buscarContratos" e depois insere no banco
     let data = p.indice ? moment().subtract(p.indice, 'days').format('DD/MM/YYYY') : moment().format('DD/MM/YYYY')
-    if(p.diaria) data = '';
-    console.log(`\n ----- Iniciando busca por contratos do dia ${data} -----`)
+    if(p.diaria) {
+        data = ''
+        data1 = moment().format('DD/MM/YYYY')
+        console.log(`\n ----- Iniciando busca por contratos do dia ${data1} -----`)
+    } else {
+        console.log(`\n ----- Iniciando busca por contratos do dia ${data} -----`)
+    }
     let dados = await buscarContratos(data)
     const connection = conexao()                       
     if(dados.length) { // Se for retornado um array vazio, não será feita a inserção dos dados no banco
