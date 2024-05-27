@@ -58,10 +58,8 @@ if(hrBuscaDiariaPI){
     }) 
 }
 
-app.listen(port, () => {
-    console.log(`Servidor escutando na porta ${port}`)
-})
-
+console.log(`Servidor escutando na porta ${port}`)
+app.listen(port)
 inserirDados()
 
 
