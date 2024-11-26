@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const conexao = require('./connection')
 
-router.get('/contratos', async (req, res) => {
+router.get('api/contratos', async (req, res) => {
     const connection = conexao();
     
     let query = 'SELECT * FROM contratos ';
@@ -48,7 +48,7 @@ router.get('/contratos', async (req, res) => {
     });
 });
 
-router.get('/contratos/nomes', async (req, res) => {
+router.get('api/contratos/nomes', async (req, res) => {
     const connection = conexao()
     let query = 'SELECT DISTINCT nome FROM contratos'
 
@@ -63,7 +63,7 @@ router.get('/contratos/nomes', async (req, res) => {
     });
 })
 
-router.get('/participacao-investidores', async (req, res) => {
+router.get('api/participacao-investidores', async (req, res) => {
     const connection = conexao();
     
     let query = 'SELECT * FROM participacao_investidores ';
